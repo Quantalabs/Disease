@@ -10,7 +10,10 @@
 				margin-right: 0px;
 				margin-top: 0px;
 				overflow-x: hidden;
-				overflow-y: hidden;
+			}
+			footer{
+				text-align: center;
+				font-family: cursive;
 			}
     </style>
   </head>
@@ -18,6 +21,9 @@
 		<canvas id="canvas">
 			Err 679-Your silly browser cannot support the canvas! GET A NEW ONE!
 		</canvas>
+    <footer>
+    <p>Made with <a href="https://github.com/quantalabs/electron">Electron</a></p>
+    </footer>
   </body>
 	<script>
 		var line = function (x, y, x2, y2, cv) {
@@ -171,12 +177,12 @@
 				if(dots[i][2] == 1){
 					dots[i][5]++
 					for(var j = 0;j<population;j++){
-						if(dots[i][1] == dots[j][1] && dots[i][0] == dots[j][0] && dots[j][2] != 2){
+						if(Math.round(dots[i][1]) == Math.round(dots[j][1]) && Math.round(dots[i][0]) == Math.round(dots[j][0]) && dots[j][2] != 2){
 							dots[j][2] = 1
-							dots[j].push = 0
+							dots[j].push(0)
 						}
 					}
-					if(dots[i][5] == 500) {
+					if(dots[i][5] >= 200) {
 						dots[i][2] = 2
 					}
 				}
