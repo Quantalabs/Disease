@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+			body{
+				margin-bottom: 0px;
+				margin-left: 0px;
+				margin-right: 0px;
+				margin-top: 0px;
+				overflow-x: hidden;
+				overflow-y: hidden;
+			}
+    </style>
+  </head>
+  <body>
+		<canvas id="canvas">
+			Err 679-Your silly browser cannot support the canvas! GET A NEW ONE!
+		</canvas>
+  </body>
+	<script>
+		var line = function (x, y, x2, y2, cv) {
+			cv.beginPath();
+			cv.moveTo(x,y);
+			cv.lineTo(x2,y2);
+			cv.stroke();
+		}
+		var fillTri = function (x1, y1, x2, y2, x3, y3, cv) {
+			cv.beginPath();
+			cv.moveTo(x1,y1);
+			cv.lineTo(x2,y2);
+			cv.lineTo(x3,y3);
+			cv.lineTo(x1,y1);
+			cv.fill();
+		};
+		var strokeTri = function (x1, y1, x2, y2, x3, y3, cv) {
+			cv.beginPath();
+			cv.moveTo(x1,y1);
+			cv.lineTo(x2,y2);
+			cv.lineTo(x3,y3);
+			cv.lineTo(x1,y1);
+			cv.stroke();
+		};
+		var erase = function (x,y,width,hieght,cv) {
+			cv.clearRect(x,y,width,hieght);
+		}
+		var shape = function (x, y, width, sides, cv) {
+				var a = sides/3;
+				var b = a * 3;
+				var c = b/sides;
+				cv.beginPath();
+				cv.moveTo(x,y);
+				cv.lineTo(x + width,y);
+				for(var i = 0; i < sides; i++) {
+						cv.lineTo(x + width*(i+1),c)
+				}
+				cv.fill();
+		}
+		var pyramid = function (x, y, height, width, cv) {
+			cv.beginPath();
+			cv.moveTo(x,y);
+			cv.lineTo(x-(width/2),y+height);
+			cv.lineTo(x+(width/2),y+height);
+			cv.lineTo(x,y);
+			cv.fill();
+			cv.beginPath();
+			cv.moveTo(x-(width/2),y+height);
+			cv.lineTo(x-(width/2)-20,y+height-5);
+			cv.lineTo(x,y);
+			cv.fill();
+			cv.beginPath();
+			cv.moveTo(x+width/2,y+height);
+			cv.lineTo(x+width/2+20,y+height-5);
+			cv.lineTo(x,y);
+			cv.fill();
+
+		}
+		var gradient = function (color1,color2,x,y,width,hieght,cv) {
+				var grd = ctx.createLinearGradient(x,y,x+width,y+hieght);
+				grd.addColorStop(0, color1);
+				grd.addColorStop(1, color2);
+				cv.fillStyle = grd;
+		}
+		var shadow = function (color,blur,offsetX,offsetY,cv) {
+				cv.shadowColor = color;
+				cv.shadowBlur = blur;
+				cv.shadowOffsetX = offsetX;
+				cv.shadowOffsetY = offsetY;
+		}
+		var fillText = function (x,y, text,size,font,cv) {
+				cv.font = size;
+				cv.strokeText(text, x, y); 
+		}
+		var fillEllipse = function (x,y,r,cv) {
+			cv.beginPath();
+			cv.arc(x,y,r,0,2*Math.PI);
+			cv.fill();
+		}
+		var strokeEllipse = function (x,y,r,cv) {
+			cv.beginPath();
+			cv.arc(x,y,r,0,2);
+			cv.stroke();
+		}
+	</script>
+  <script>
+		var cv = document.getElementById("canvas")
+		var c = cv.getContext("2d")
+		
+		var population = 100
+		var infected = 1
+		var speed = 10
+		
+		cv.width = window.innerWidth
+		cv.height = window.innerHeight
+		
+		var dots = [];
+		
+		// [x, y, state, vx, vy, time]
+		for(var i = 0; i<population-infected;i++){
+			dots.push([Math.random()*Math.min(cv.width,cv.height)*3/4,Math.random()*Math.min(cv.width, cv.height) * 3/4,0,speed*Math.random(),speed*Math.random()])
+		}
+		for(var i = 0; i<infected; i++){
+			dots.push([Math.random()*Math.min(cv.width, cv.height) * 3/4,Math.random()*Math.min(cv.width, cv.height) * 3/4,1,speed*Math.random(),speed*Math.random(),0])
+		}
+		var refresh = function()
+		{
+			
+			c.fillStyle = "rgb(0,0,0)"
+			c.fillRect(0,0,window.innerWidth,window.innerHeight)
+			c.strokeStyle = "rgb(255,255,255	)"
+			c.strokeRect(cv.width/2 - Math.min(cv.width, cv.height) * 3/8, cv.height/2 - Math.min(cv.width, cv.height) * 3/8, Math.min(cv.width, cv.height) * 3/4, Math.min(cv.width, cv.height) * 3/4)
+			for(var i = 0; i<population;i++){
+				if(dots[i][2] == 0){
+					c.fillStyle = "rgb(0,0,255)"
+					fillEllipse(dots[i][0]+cv.width/2 - Math.min(cv.width, cv.height) * 3/8,dots[i][1]+cv.height/2 - Math.min(cv.width, cv.height) * 3/8,5,c)
+				} else if(dots[i][2] == 1) {
+					c.fillStyle = "rgb(255,0,0)"
+					fillEllipse(dots[i][0]+cv.width/2 - Math.min(cv.width, cv.height) * 3/8,dots[i][1]+cv.height/2 - Math.min(cv.width, cv.height) * 3/8,5,c)
+				} else {
+					c.fillStyle = "rgb(139,272,2)"
+					fillEllipse(dots[i][0]+cv.width/2 - Math.min(cv.width, cv.height) * 3/8,dots[i][1]+cv.height/2 - Math.min(cv.width, cv.height) * 3/8,5,c)
+				}
+			}
+			for(var i = 0; i < population;i++){
+				dots[i][3]+=Math.random()*2-1
+				dots[i][4]+=Math.random()*2-1
+				
+				if ( dots[i][3] >= speed ){dots[i][3] = 0}
+				if ( dots[i][3] <= -speed ){dots[i][3] = 0}
+				if ( dots[i][4] >= speed ){dots[i][4] = 0}
+				if ( dots[i][4] <= -speed ){dots[i][4] = 0}
+				
+				dots[i][0]+=dots[i][3]
+				dots[i][1]+=dots[i][4]
+				
+				if(dots[i][0]>1*Math.min(cv.width,cv.height)*3/4){
+					dots[i][0]=1*Math.min(cv.width,cv.height)*3/4	
+				}
+				if(dots[i][0]<0){
+					dots[i][0]=0	
+				}
+				if(dots[i][1]>1*Math.min(cv.width,cv.height)*3/4){
+					dots[i][1]=1*Math.min(cv.width,cv.height)*3/4	
+				}
+				if(dots[i][1]<0){
+					dots[i][1]=0	
+				}
+			}
+			for(var i = 0;i<population;i++){
+				if(dots[i][2] == 1){
+					dots[i][5]++
+					for(var j = 0;j<population;j++){
+						if(dots[i][1] == dots[j][1] && dots[i][0] == dots[j][0] && dots[j][2] != 2){
+							dots[j][2] = 1
+							dots[j].push = 0
+						}
+					}
+					if(dots[i][5] == 500) {
+						dots[i][2] = 2
+					}
+				}
+			}
+			window.requestAnimationFrame(refresh)
+		}
+		
+		refresh()
+		
+  </script>
+</html>
