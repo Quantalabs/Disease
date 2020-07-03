@@ -10,6 +10,7 @@
 				margin-right: 0px;
 				margin-top: 0px;
 				overflow-x: hidden;
+				text-align: center;
 			}
 			footer{
 				text-align: center;
@@ -21,10 +22,11 @@
 		<canvas id="canvas">
 			Err 679-Your silly browser cannot support the canvas! GET A NEW ONE!
 		</canvas>
+		<label>Start Infection Number</label>
+		<br>
+		<input type="range" id="si" min="1" max="20">
     <footer>
-    	<p>
-				Made with <a href="https://github.com/quantalabs/electron">Electron</a>
-			</p>
+    <p>Made with <a href="https://github.com/quantalabs/electron">Electron</a></p>
     </footer>
   </body>
 	<script>
@@ -116,8 +118,9 @@
 		var c = cv.getContext("2d")
 		
 		var population = 100
-		var infected = 1
+		var infected = document.getElementById("si").value
 		var speed = 10
+		var currentInfections = 1
 		
 		cv.width = window.innerWidth
 		cv.height = window.innerHeight
@@ -182,6 +185,7 @@
 						if(Math.round(dots[i][1]) == Math.round(dots[j][1]) && Math.round(dots[i][0]) == Math.round(dots[j][0]) && dots[j][2] != 2){
 							dots[j][2] = 1
 							dots[j].push(0)
+							currentInfections++
 						}
 					}
 					if(dots[i][5] >= 200) {
@@ -190,9 +194,28 @@
 				}
 			}
 			window.requestAnimationFrame(refresh)
+			
 		}
 		
 		refresh()
 		
+		var a = document.getElementById("si")
+		var onChange = function () {
+			population = 100
+			infected = document.getElementById("si").value
+			speed = 10
+			currentInfections = 1
+
+			dots = [];
+
+			// [x, y, state, vx, vy, time]
+			for(var i = 0; i<population-infected;i++){
+				dots.push([Math.random()*Math.min(cv.width,cv.height)*3/4,Math.random()*Math.min(cv.width, cv.height) * 3/4,0,speed*Math.random(),speed*Math.random()])
+			}
+			for(var i = 0; i<infected; i++){
+				dots.push([Math.random()*Math.min(cv.width, cv.height) * 3/4,Math.random()*Math.min(cv.width, cv.height) * 3/4,1,speed*Math.random(),speed*Math.random(),0])
+			}
+		}
+		a.addEventListener("change",onChange)
   </script>
 </html>
