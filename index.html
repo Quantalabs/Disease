@@ -226,7 +226,11 @@
 					} else if(dots[i][2] == 1) {
 						c.fillStyle = "rgb(255,0,0)"
 						fillEllipse(dots[i][0]+cv.width/2 - Math.min(cv.width, cv.height) * 3/8,dots[i][1]+cv.height/2 - Math.min(cv.width, cv.height) * 3/8,5,c)
-					} else {
+					} else if(dots[i][2] == 3) {
+						c.fillStyle = "rgb(0,0,0)"
+						fillEllipse(dots[i][0]+cv.width/2 - Math.min(cv.width, cv.height) * 3/8,dots[i][1]+cv.height/2 - Math.min(cv.width, cv.height) * 3/8,5,c)
+					}
+					else {
 						c.fillStyle = "rgb(139,272,2)"
 						fillEllipse(dots[i][0]+cv.width/2 - Math.min(cv.width, cv.height) * 3/8,dots[i][1]+cv.height/2 - Math.min(cv.width, cv.height) * 3/8,5,c)
 					}
@@ -261,22 +265,22 @@
 						dots[i][5]++
 						for(var j = 0;j<population;j++){
 							for(var k = 0;k<10;k++){
-								if(Math.round(dots[i][1])+k == Math.round(dots[j][1]) && Math.round(dots[i][0]) == Math.round(dots[j][0]) && dots[j][2] != 2){
+								if(Math.round(dots[i][1])+k == Math.round(dots[j][1]) && Math.round(dots[i][0]) == Math.round(dots[j][0]) && dots[j][2] == 0){
 									dots[j][2] = 1
 									dots[j].push(0)
 									currentInfections++
 								}
-								if(Math.round(dots[i][1])-k == Math.round(dots[j][1]) && Math.round(dots[i][0]) == Math.round(dots[j][0]) && dots[j][2] != 2) {
+								if(Math.round(dots[i][1])-k == Math.round(dots[j][1]) && Math.round(dots[i][0]) == Math.round(dots[j][0]) && dots[j][2] == 0) {
 									dots[j][2] = 1
 									dots[j].push(0)
 									currentInfections++
 								}
-								if(Math.round(dots[i][1]) == Math.round(dots[j][1]) && Math.round(dots[i][0])+k == Math.round(dots[j][0]) && dots[j][2] != 2) {
+								if(Math.round(dots[i][1]) == Math.round(dots[j][1]) && Math.round(dots[i][0])+k == Math.round(dots[j][0]) && dots[j][2] == 0) {
 									dots[j][2] = 1
 									dots[j].push(0)
 									currentInfections++
 								}
-								if(Math.round(dots[i][1]) == Math.round(dots[j][1]) && Math.round(dots[i][0])-k == Math.round(dots[j][0]) && dots[j][2] != 2) {
+								if(Math.round(dots[i][1]) == Math.round(dots[j][1]) && Math.round(dots[i][0])-k == Math.round(dots[j][0]) && dots[j][2] == 0) {
 									dots[j][2] = 1
 									dots[j].push(0)
 									currentInfections++
@@ -284,7 +288,12 @@
 							}
 						}
 						if(dots[i][5] >= 200) {
-							dots[i][2] = 2
+							var die = Math.round(Math.random())
+							if(die == 0) {
+								dots[i][2] = 2
+							} else {
+								dots[i][2] = 3
+							}
 						}
 					}
 				}
@@ -352,6 +361,9 @@
 				} else if(dotstwo[i][2] == 1) {
 					ctwo.fillStyle = "rgb(255,0,0)"
 					fillEllipse(dotstwo[i][0]+cvtwo.width/2 - Math.min(cvtwo.width, cvtwo.height) * 3/8,dotstwo[i][1]+cvtwo.height/2 - Math.min(cvtwo.width, cvtwo.height) * 3/8,5,ctwo)
+				} else if(dotstwo[i][2] == 3) {
+					ctwo.fillStyle = "rgb(0,0,0)"
+					fillEllipse(dotstwo[i][0]+cvtwo.width/2 - Math.min(cvtwo.width, cvtwo.height) * 3/8,dotstwo[i][1]+cvtwo.height/2 - Math.min(cvtwo.width, cvtwo.height) * 3/8,5,ctwo)
 				} else {
 					ctwo.fillStyle = "rgb(139,272,2)"
 					fillEllipse(dotstwo[i][0]+cvtwo.width/2 - Math.min(cvtwo.width, cvtwo.height) * 3/8,dotstwo[i][1]+cvtwo.height/2 - Math.min(cvtwo.width, cvtwo.height) * 3/8,5,ctwo)
@@ -410,7 +422,12 @@
 							}
 						}
 						if(dotstwo[i][5] >= 200) {
-							dotstwo[i][2] = 2
+							var dietwo = Math.round(Math.random())
+							if(dietwo == 0) {
+								dotstwo[i][2] = 2
+							} else {
+								dotstwo[i][2] = 3
+							}
 						}
 					}
 				}
@@ -458,6 +475,9 @@
 						fillEllipse(dotsthree[i][0]+cvthree.width/2 - Math.min(cvthree.width, cvthree.height) * 3/8,dotsthree[i][1]+cvthree.height/2 - Math.min(cvthree.width, cvthree.height) * 3/8,5,cthree)
 					} else if(dotsthree[i][2] == 1) {
 						cthree.fillStyle = "rgb(255,0,0)"
+						fillEllipse(dotsthree[i][0]+cvthree.width/2 - Math.min(cvthree.width, cvthree.height) * 3/8,dotsthree[i][1]+cvthree.height/2 - Math.min(cvthree.width, cvthree.height) * 3/8,5,cthree)
+					} else if(dotsthree[i][2] == 3) {
+						cthree.fillStyle = "rgb(0,0,0)"
 						fillEllipse(dotsthree[i][0]+cvthree.width/2 - Math.min(cvthree.width, cvthree.height) * 3/8,dotsthree[i][1]+cvthree.height/2 - Math.min(cvthree.width, cvthree.height) * 3/8,5,cthree)
 					} else {
 						cthree.fillStyle = "rgb(139,272,2)"
@@ -517,7 +537,12 @@
 							}
 						}
 						if(dotsthree[i][5] >= 200) {
-							dotsthree[i][2] = 2
+							var diethree = Math.round(Math.random())
+							if(diethree == 0) {
+								dotsthree[i][2] = 2
+							} else {
+								dotsthree[i][2] = 3
+							}
 						}
 					}
 				}
@@ -564,7 +589,11 @@
 					else if(dotsfour[i][2] == 1) {
 						cfour.fillStyle = "rgb(255,0,0)"
 						fillEllipse(dotsfour[i][0]+cvfour.width/2 - Math.min(cvfour.width, cvfour.height) * 3/8,dotsfour[i][1]+cvfour.height/2 - Math.min(cvfour.width, cvfour.height) * 3/8,5,cfour)
-					} 
+					}
+					else if(dotsfour[i][2] == 3) {
+						cfour.fillStyle = "rgb(0,0,0)"
+						fillEllipse(dotsfour[i][0]+cvfour.width/2 - Math.min(cvfour.width, cvfour.height) * 3/8,dotsfour[i][1]+cvfour.height/2 - Math.min(cvfour.width, cvfour.height) * 3/8,5,cfour)
+					}
 					else {
 						cfour.fillStyle = "rgb(139,272,2)"
 						fillEllipse(dotsfour[i][0]+cvfour.width/2 - Math.min(cvfour.width, cvfour.height) * 3/8,dotsfour[i][1]+cvfour.height/2 - Math.min(cvfour.width, cvfour.height) * 3/8,5,cfour)
@@ -623,7 +652,12 @@
 							}
 						}
 						if(dotsfour[i][5] >= 200) {
-							dotsfour[i][2] = 2
+							var diefour = Math.round(Math.random())
+							if(diefour == 0) {
+								dotsfour[i][2] = 3
+							} else {
+								dotsfour[i][2] = 2
+							}
 						}
 					}
 				}
