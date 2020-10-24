@@ -1,1 +1,1 @@
-@qlabs/lamp
+qlabs/Lamp
