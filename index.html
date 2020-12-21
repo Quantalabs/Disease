@@ -58,20 +58,6 @@
 		</canvas>
 		<label>Start Infection Number</label>
 		<br>
-		<input type="range" id="si" min="1" max="100" value="1">
-		<datalist id="tickmarks">
-  		<option value="0" label="0%"></option>
-			<option value="10"></option>
-			<option value="20"></option>
-  		<option value="30"></option>
-  		<option value="40"></option>
-  		<option value="50" label="50%"></option>
-  		<option value="60"></option>
-  		<option value="70"></option>
-  		<option value="80"></option>
-  		<option value="90"></option>
-  		<option value="100" label="100%"></option>
-		</datalist>
 		<br>
 		<br>
 		<br>
@@ -113,7 +99,7 @@
 			var c = cv.getContext("2d")
 
 			var population = 100
-			var infected = document.getElementById("si").value
+			var infected = 1
 			var speed = 10
 			var currentInfections = 1
 
