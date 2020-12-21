@@ -55,518 +55,141 @@
   <body>
 		<canvas id="canvas">
 			Err 404-Your browser doesn't support the canvas.
-		</canvas>
-		<label>Start Infection Number</label>
-		<br>
-		<br>
-		<br>
-		<br>
-		<hr>
-		<br>
-		<p>
-			In the disease simulation above, everyone is moving around freely as if there's no virus. The truth is, <i>most</i> people don't spend there time randomly wandering around during the day especially when there's a virus. Let's say that the amount of people who don't care about this virus, which, kills about 0.17% of people in New Jersey (<a href="https://www.statista.com/statistics/1109011/coronavirus-covid19-death-rates-us-by-state/">Statista.com</a>, July 3, 2020), is 25% of the population. The other 75% of the people adopt a strategy that health officials are calling "social distancing". When social distancing, our dots will stay sill. When a red dot touches one of them, it's like them going to a shop and getting infected. This is what we get:
-		</p>
-		<canvas id="sdcanvas">
-			Err 404-Your browser doesn't support the canvas.
-		</canvas>
-		<p>
-			As you can see, much less people get infected. This proves how much social distancing helps. Some people will get infected, but chances are you won't. But what if you changed it so a smaller portion of the population was socially distancing? Say 25%?
-		</p>
-		<canvas id="sdcanvas2">
-			Err 404-Your browser doesn't support the canvas.
-		</canvas>
-		<p>
-			Much more people are infected. Almost all are people who aren't socially distancing. Now lets look at 50% of the people. What happens now?
-		</p>
-		<canvas id="sdcanvas3">
-			Err 404-Your browser doesn't suport the canvas.
-		</canvas>
-		<p>
-			What about the other values to put into consideration? We could grow bigger and bigger with our model. But for now, lets keep it how it is.
-		</p>
-		<br>
-		<br>
+		</canvas>	
     <footer>
     <p>Made with <a href="https://github.com/quantalabs/lamp">Lamp</a></p>
     </footer>
   </body>
   <script src="https://cdn.jsdelivr.net/gh/quantalabs/lamp/index.js"></script>
   <script>
-		
-		//Simlation 1
-		{
-			var cv = document.getElementById("canvas")
-			var c = cv.getContext("2d")
+	var cv = document.getElementById("canvas")
+	var c = cv.getContext("2d")
 
-			var population = 100
-			var infected = 1
-			var speed = 10
-			var currentInfections = 1
+	var population = 100
+	var infected = 1
+	var speed = 10
+	var currentInfections = 1
 
-			cv.width = window.innerWidth
-			cv.height = window.innerHeight
+	cv.width = window.innerWidth
+	cv.height = window.innerHeight
 
-			var dots = [];
+	var dots = [];
 
-			// [x, y, state, vx, vy, time]
-			for(var i = 0; i<population-infected;i++){
-				dots.push([Math.random()*Math.min(cv.width,cv.height)*3/4,Math.random()*Math.min(cv.width, cv.height) * 3/4,0,speed*Math.random(),speed*Math.random()])
+	// [x, y, state, vx, vy, time]
+	for(var i = 0; i<population-infected;i++){
+		dots.push([Math.random()*Math.min(cv.width,cv.height)*3/4,Math.random()*Math.min(cv.width, cv.height) * 3/4,0,speed*Math.random(),speed*Math.random()])
+	}
+	for(var i = 0; i<infected; i++){
+		dots.push([Math.random()*Math.min(cv.width, cv.height) * 3/4,Math.random()*Math.min(cv.width, cv.height) * 3/4,1,speed*Math.random(),speed*Math.random(),0])
+	}
+	var refresh = function()
+	{
+
+		c.fillStyle = "rgb(255,255,255)"
+		c.fillRect(0,0,window.innerWidth,window.innerHeight)
+		c.strokeStyle = "rgb(0,0,0)"
+		c.strokeRect(cv.width/2 - Math.min(cv.width, cv.height) * 3/8, cv.height/2 - Math.min(cv.width, cv.height) * 3/8, Math.min(cv.width, cv.height) * 3/4, Math.min(cv.width, cv.height) * 3/4)
+		for(var i = 0; i<population;i++){	//drawing
+			if(dots[i][2] == 0){
+				c.fillStyle = "rgb(0,0,255)"
+				fillEllipse(dots[i][0]+cv.width/2 - Math.min(cv.width, cv.height) * 3/8,dots[i][1]+cv.height/2 - Math.min(cv.width, cv.height) * 3/8,5,c)
+			} else if(dots[i][2] == 1) {
+				c.fillStyle = "rgb(255,0,0)"
+				fillEllipse(dots[i][0]+cv.width/2 - Math.min(cv.width, cv.height) * 3/8,dots[i][1]+cv.height/2 - Math.min(cv.width, cv.height) * 3/8,5,c)
+			} else if(dots[i][2] == 3) {
+				c.fillStyle = "rgb(0,0,0)"
+				fillEllipse(dots[i][0]+cv.width/2 - Math.min(cv.width, cv.height) * 3/8,dots[i][1]+cv.height/2 - Math.min(cv.width, cv.height) * 3/8,5,c)
 			}
-			for(var i = 0; i<infected; i++){
-				dots.push([Math.random()*Math.min(cv.width, cv.height) * 3/4,Math.random()*Math.min(cv.width, cv.height) * 3/4,1,speed*Math.random(),speed*Math.random(),0])
+			else {
+				c.fillStyle = "rgb(139,272,2)"
+				fillEllipse(dots[i][0]+cv.width/2 - Math.min(cv.width, cv.height) * 3/8,dots[i][1]+cv.height/2 - Math.min(cv.width, cv.height) * 3/8,5,c)
 			}
-			var refresh = function()
-			{
-
-				c.fillStyle = "rgb(255,255,255)"
-				c.fillRect(0,0,window.innerWidth,window.innerHeight)
-				c.strokeStyle = "rgb(0,0,0)"
-				c.strokeRect(cv.width/2 - Math.min(cv.width, cv.height) * 3/8, cv.height/2 - Math.min(cv.width, cv.height) * 3/8, Math.min(cv.width, cv.height) * 3/4, Math.min(cv.width, cv.height) * 3/4)
-				for(var i = 0; i<population;i++){	//drawing
-					if(dots[i][2] == 0){
-						c.fillStyle = "rgb(0,0,255)"
-						fillEllipse(dots[i][0]+cv.width/2 - Math.min(cv.width, cv.height) * 3/8,dots[i][1]+cv.height/2 - Math.min(cv.width, cv.height) * 3/8,5,c)
-					} else if(dots[i][2] == 1) {
-						c.fillStyle = "rgb(255,0,0)"
-						fillEllipse(dots[i][0]+cv.width/2 - Math.min(cv.width, cv.height) * 3/8,dots[i][1]+cv.height/2 - Math.min(cv.width, cv.height) * 3/8,5,c)
-					} else if(dots[i][2] == 3) {
-						c.fillStyle = "rgb(0,0,0)"
-						fillEllipse(dots[i][0]+cv.width/2 - Math.min(cv.width, cv.height) * 3/8,dots[i][1]+cv.height/2 - Math.min(cv.width, cv.height) * 3/8,5,c)
-					}
-					else {
-						c.fillStyle = "rgb(139,272,2)"
-						fillEllipse(dots[i][0]+cv.width/2 - Math.min(cv.width, cv.height) * 3/8,dots[i][1]+cv.height/2 - Math.min(cv.width, cv.height) * 3/8,5,c)
-					}
-				}
-				for(var i = 0; i < population;i++){	//movement
-					dots[i][3]+=Math.random()*2-1
-					dots[i][4]+=Math.random()*2-1
-
-					if ( dots[i][3] >= speed ){dots[i][3] = 0}
-					if ( dots[i][3] <= -speed ){dots[i][3] = 0}
-					if ( dots[i][4] >= speed ){dots[i][4] = 0}
-					if ( dots[i][4] <= -speed ){dots[i][4] = 0}
-
-					dots[i][0]+=dots[i][3]
-					dots[i][1]+=dots[i][4]
-
-					if(dots[i][0]>1*Math.min(cv.width,cv.height)*3/4){
-						dots[i][0]=1*Math.min(cv.width,cv.height)*3/4	
-					}
-					if(dots[i][0]<0){
-						dots[i][0]=0	
-					}
-					if(dots[i][1]>1*Math.min(cv.width,cv.height)*3/4){
-						dots[i][1]=1*Math.min(cv.width,cv.height)*3/4	
-					}
-					if(dots[i][1]<0){
-						dots[i][1]=0	
-					}
-				}
-				for(var i = 0;i<population;i++){	//infection
-					if(dots[i][2] == 1){
-						dots[i][5]++
-						for(var j = 0;j<population;j++){
-							for(var k = 0;k<10;k++){
-								if(Math.round(dots[i][1])+k == Math.round(dots[j][1]) && Math.round(dots[i][0]) == Math.round(dots[j][0]) && dots[j][2] == 0){
-									dots[j][2] = 1
-									dots[j].push(0)
-									currentInfections++
-								}
-								if(Math.round(dots[i][1])-k == Math.round(dots[j][1]) && Math.round(dots[i][0]) == Math.round(dots[j][0]) && dots[j][2] == 0) {
-									dots[j][2] = 1
-									dots[j].push(0)
-									currentInfections++
-								}
-								if(Math.round(dots[i][1]) == Math.round(dots[j][1]) && Math.round(dots[i][0])+k == Math.round(dots[j][0]) && dots[j][2] == 0) {
-									dots[j][2] = 1
-									dots[j].push(0)
-									currentInfections++
-								}
-								if(Math.round(dots[i][1]) == Math.round(dots[j][1]) && Math.round(dots[i][0])-k == Math.round(dots[j][0]) && dots[j][2] == 0) {
-									dots[j][2] = 1
-									dots[j].push(0)
-									currentInfections++
-								}
-							}
-						}
-						if(dots[i][5] >= 200) {
-							var die = Math.round(Math.random())
-							if(die == 0) {
-								dots[i][2] = 2
-							} else {
-								dots[i][2] = 3
-							}
-						}
-					}
-				}
-				window.requestAnimationFrame(refresh)
-
-			}
-
-			refresh()
-
-			var a = document.getElementById("si")
-			var onChange = function () {
-				population = 100
-				infected = document.getElementById("si").value
-				speed = 10
-				currentInfections = 1
-
-				dots = [];
-
-				// [x, y, state, vx, vy, time]
-				for(var i = 0; i<population-infected;i++){
-					dots.push([Math.random()*Math.min(cv.width,cv.height)*3/4,Math.random()*Math.min(cv.width, cv.height) * 3/4,0,speed*Math.random(),speed*Math.random()])
-				}
-				for(var i = 0; i<infected; i++){
-					dots.push([Math.random()*Math.min(cv.width, cv.height) * 3/4,Math.random()*Math.min(cv.width, cv.height) * 3/4,1,speed*Math.random(),speed*Math.random(),0])
-				}
-			}
-			a.addEventListener("change",onChange)
 		}
-		
-		//Simulation 2
-		{
-		var cvtwo = document.getElementById("sdcanvas")
-		var ctwo = cvtwo.getContext("2d")
+		for(var i = 0; i < population;i++){	//movement
+			dots[i][3]+=Math.random()*2-1
+			dots[i][4]+=Math.random()*2-1
 
-		var populationtwo = 100
-		var infectedtwo = 1
-		var speedtwo = 15
-		var currentInfectionsTwo = 1
-		var still = (populationtwo-infectedtwo)/4*3
+			if ( dots[i][3] >= speed ){dots[i][3] = 0}
+			if ( dots[i][3] <= -speed ){dots[i][3] = 0}
+			if ( dots[i][4] >= speed ){dots[i][4] = 0}
+			if ( dots[i][4] <= -speed ){dots[i][4] = 0}
 
-		cvtwo.width = window.innerWidth
-		cvtwo.height = window.innerHeight
+			dots[i][0]+=dots[i][3]
+			dots[i][1]+=dots[i][4]
 
-		var dotstwo = [];
+			if(dots[i][0]>1*Math.min(cv.width,cv.height)*3/4){
+				dots[i][0]=1*Math.min(cv.width,cv.height)*3/4	
+			}
+			if(dots[i][0]<0){
+				dots[i][0]=0	
+			}
+			if(dots[i][1]>1*Math.min(cv.width,cv.height)*3/4){
+				dots[i][1]=1*Math.min(cv.width,cv.height)*3/4	
+			}
+			if(dots[i][1]<0){
+				dots[i][1]=0	
+			}
+		}
+		for(var i = 0;i<population;i++){	//infection
+			if(dots[i][2] == 1){
+				dots[i][5]++
+				for(var j = 0;j<population;j++){
+					for(var k = 0;k<10;k++){
+						if(Math.round(dots[i][1])+k == Math.round(dots[j][1]) && Math.round(dots[i][0]) == Math.round(dots[j][0]) && dots[j][2] == 0){
+							dots[j][2] = 1
+							dots[j].push(0)
+							currentInfections++
+						}
+						if(Math.round(dots[i][1])-k == Math.round(dots[j][1]) && Math.round(dots[i][0]) == Math.round(dots[j][0]) && dots[j][2] == 0) {
+							dots[j][2] = 1
+							dots[j].push(0)
+							currentInfections++
+						}
+						if(Math.round(dots[i][1]) == Math.round(dots[j][1]) && Math.round(dots[i][0])+k == Math.round(dots[j][0]) && dots[j][2] == 0) {
+							dots[j][2] = 1
+							dots[j].push(0)
+							currentInfections++
+						}
+						if(Math.round(dots[i][1]) == Math.round(dots[j][1]) && Math.round(dots[i][0])-k == Math.round(dots[j][0]) && dots[j][2] == 0) {
+							dots[j][2] = 1
+							dots[j].push(0)
+							currentInfections++
+						}
+					}
+				}
+				if(dots[i][5] >= 200) {
+					var die = Math.round(Math.random())
+					if(die == 0) {
+						dots[i][2] = 2
+					} else {
+						dots[i][2] = 3
+					}
+				}
+			}
+		}
+		window.requestAnimationFrame(refresh)
+
+	}
+
+	refresh()
+
+	var a = document.getElementById("si")
+	var onChange = function () {
+		population = 100
+		infected = document.getElementById("si").value
+		speed = 10
+		currentInfections = 1
+
+		dots = [];
 
 		// [x, y, state, vx, vy, time]
-		for(var i = 0; i<infectedtwo; i++){
-			dotstwo.push([Math.random()*Math.min(cvtwo.width, cvtwo.height) * 3/4,Math.random()*Math.min(cvtwo.width, cvtwo.height) * 3/4,1,speedtwo*Math.random(),speedtwo*Math.random(),0])
+		for(var i = 0; i<population-infected;i++){
+			dots.push([Math.random()*Math.min(cv.width,cv.height)*3/4,Math.random()*Math.min(cv.width, cv.height) * 3/4,0,speed*Math.random(),speed*Math.random()])
 		}
-		for(var i = 0; i<populationtwo-infectedtwo;i++){
-			dotstwo.push([Math.random()*Math.min(cvtwo.width,cvtwo.height)*3/4,Math.random()*Math.min(cvtwo.width, cvtwo.height) * 3/4,0,speedtwo*Math.random(),speedtwo*Math.random()])
+		for(var i = 0; i<infected; i++){
+			dots.push([Math.random()*Math.min(cv.width, cv.height) * 3/4,Math.random()*Math.min(cv.width, cv.height) * 3/4,1,speed*Math.random(),speed*Math.random(),0])
 		}
-		
-		var refreshTwo = function()
-		{
-
-			ctwo.fillStyle = "rgb(255,255,255)"
-			ctwo.fillRect(0,0,window.innerWidth,window.innerHeight)
-			ctwo.strokeStyle = "rgb(0,0,0)"
-			ctwo.strokeRect(cvtwo.width/2 - Math.min(cvtwo.width, cvtwo.height) * 3/8, cvtwo.height/2 - Math.min(cvtwo.width, cvtwo.height) * 3/8, Math.min(cvtwo.width, cvtwo.height) * 3/4, Math.min(cvtwo.width, cvtwo.height) * 3/4)
-			for(var i = 0; i<populationtwo; i++){	//drawing
-				if(dotstwo[i][2] == 0){
-					ctwo.fillStyle = "rgb(0,0,255)"
-					fillEllipse(dotstwo[i][0]+cvtwo.width/2 - Math.min(cvtwo.width, cvtwo.height) * 3/8,dotstwo[i][1]+cvtwo.height/2 - Math.min(cvtwo.width, cvtwo.height) * 3/8,5,ctwo)
-				} else if(dotstwo[i][2] == 1) {
-					ctwo.fillStyle = "rgb(255,0,0)"
-					fillEllipse(dotstwo[i][0]+cvtwo.width/2 - Math.min(cvtwo.width, cvtwo.height) * 3/8,dotstwo[i][1]+cvtwo.height/2 - Math.min(cvtwo.width, cvtwo.height) * 3/8,5,ctwo)
-				} else if(dotstwo[i][2] == 3) {
-					ctwo.fillStyle = "rgb(0,0,0)"
-					fillEllipse(dotstwo[i][0]+cvtwo.width/2 - Math.min(cvtwo.width, cvtwo.height) * 3/8,dotstwo[i][1]+cvtwo.height/2 - Math.min(cvtwo.width, cvtwo.height) * 3/8,5,ctwo)
-				} else {
-					ctwo.fillStyle = "rgb(139,272,2)"
-					fillEllipse(dotstwo[i][0]+cvtwo.width/2 - Math.min(cvtwo.width, cvtwo.height) * 3/8,dotstwo[i][1]+cvtwo.height/2 - Math.min(cvtwo.width, cvtwo.height) * 3/8,5,ctwo)
-				}
-			}
-			for(var i = 0; i < populationtwo-still;i++){	//movement
-				dotstwo[i][3]+=Math.random()*2-1
-				dotstwo[i][4]+=Math.random()*2-1
-
-				if ( dotstwo[i][3] >= speedtwo ){dotstwo[i][3] = 0}
-				if ( dotstwo[i][3] <= -speedtwo ){dotstwo[i][3] = 0}
-				if ( dotstwo[i][4] >= speedtwo ){dotstwo[i][4] = 0}
-				if ( dotstwo[i][4] <= -speedtwo ){dotstwo[i][4] = 0}
-
-				dotstwo[i][0]+=dotstwo[i][3]
-				dotstwo[i][1]+=dotstwo[i][4]
-
-				if(dotstwo[i][0]>1*Math.min(cvtwo.width,cvtwo.height)*3/4){
-					dotstwo[i][0]=1*Math.min(cvtwo.width,cvtwo.height)*3/4	
-				}
-				if(dotstwo[i][0]<0){
-					dotstwo[i][0]=0	
-				}
-				if(dotstwo[i][1]>1*Math.min(cvtwo.width,cvtwo.height)*3/4){
-					dotstwo[i][1]=1*Math.min(cvtwo.width,cvtwo.height)*3/4	
-				}
-				if(dotstwo[i][1]<0){
-					dotstwo[i][1]=0	
-				}
-			}
-			for(var i = 0;i<populationtwo;i++){	//infection
-					if(dotstwo[i][2] == 1){
-						dotstwo[i][5]++
-						for(var j = 0;j<populationtwo;j++){
-							for(var k = 0;k<10;k++){
-								if(Math.round(dotstwo[i][1])+k == Math.round(dotstwo[j][1]) && Math.round(dotstwo[i][0]) == Math.round(dotstwo[j][0]) && dotstwo[j][2] != 2){
-									dotstwo[j][2] = 1
-									dotstwo[j].push(0)
-									currentInfectionsTwo++
-								}
-								if(Math.round(dotstwo[i][1])-k == Math.round(dotstwo[j][1]) && Math.round(dotstwo[i][0]) == Math.round(dotstwo[j][0]) && dotstwo[j][2] != 2) {
-									dotstwo[j][2] = 1
-									dotstwo[j].push(0)
-									currentInfectionsTwo++
-								}
-								if(Math.round(dotstwo[i][1]) == Math.round(dotstwo[j][1]) && Math.round(dotstwo[i][0])+k == Math.round(dotstwo[j][0]) && dotstwo[j][2] != 2) {
-									dotstwo[j][2] = 1
-									dotstwo[j].push(0)
-									currentInfectionsTwo++
-								}
-								if(Math.round(dotstwo[i][1]) == Math.round(dotstwo[j][1]) && Math.round(dotstwo[i][0])-k == Math.round(dotstwo[j][0]) && dotstwo[j][2] != 2) {
-									dotstwo[j][2] = 1
-									dotstwo[j].push(0)
-									currentInfectionsTwo++
-								}
-							}
-						}
-						if(dotstwo[i][5] >= 200) {
-							var dietwo = Math.round(Math.random())
-							if(dietwo == 0) {
-								dotstwo[i][2] = 2
-							} else {
-								dotstwo[i][2] = 3
-							}
-						}
-					}
-				}
-			window.requestAnimationFrame(refreshTwo)
-
-		}
-
-		refreshTwo()
-		}
-		
-		//Simulation 3
-		{
-			var cvthree = document.getElementById("sdcanvas2")
-			var cthree = cvthree.getContext("2d")
-
-			var populationthree = 100
-			var infectedthree = 1
-			var speedthree = 15
-			var currentInfectionsThree = 1
-			var stilltwo = (populationthree-infectedthree)/4
-
-			cvthree.width = window.innerWidth
-			cvthree.height = window.innerHeight
-
-			var dotsthree = [];
-
-			// [x, y, state, vx, vy, time]
-			for(var i = 0; i<infectedthree; i++){
-				dotsthree.push([Math.random()*Math.min(cvthree.width, cvthree.height) * 3/4,Math.random()*Math.min(cvthree.width, cvthree.height) * 3/4,1,speedthree*Math.random(),speedthree*Math.random(),0])
-			}
-			for(var i = 0; i<populationthree-infectedthree;i++){
-				dotsthree.push([Math.random()*Math.min(cvthree.width,cvthree.height)*3/4,Math.random()*Math.min(cvthree.width, cvthree.height) * 3/4,0,speedthree*Math.random(),speedthree*Math.random()])
-			}
-
-			var refreshThree = function()
-			{
-
-				cthree.fillStyle = "rgb(255,255,255)"
-				cthree.fillRect(0,0,window.innerWidth,window.innerHeight)
-				cthree.strokeStyle = "rgb(0,0,0)"
-				cthree.strokeRect(cvthree.width/2 - Math.min(cvthree.width, cvthree.height) * 3/8, cvthree.height/2 - Math.min(cvthree.width, cvthree.height) * 3/8, Math.min(cvthree.width, cvthree.height) * 3/4, Math.min(cvthree.width, cvthree.height) * 3/4)
-				for(var i = 0; i<populationthree; i++){	//drawing
-					if(dotsthree[i][2] == 0){
-						cthree.fillStyle = "rgb(0,0,255)"
-						fillEllipse(dotsthree[i][0]+cvthree.width/2 - Math.min(cvthree.width, cvthree.height) * 3/8,dotsthree[i][1]+cvthree.height/2 - Math.min(cvthree.width, cvthree.height) * 3/8,5,cthree)
-					} else if(dotsthree[i][2] == 1) {
-						cthree.fillStyle = "rgb(255,0,0)"
-						fillEllipse(dotsthree[i][0]+cvthree.width/2 - Math.min(cvthree.width, cvthree.height) * 3/8,dotsthree[i][1]+cvthree.height/2 - Math.min(cvthree.width, cvthree.height) * 3/8,5,cthree)
-					} else if(dotsthree[i][2] == 3) {
-						cthree.fillStyle = "rgb(0,0,0)"
-						fillEllipse(dotsthree[i][0]+cvthree.width/2 - Math.min(cvthree.width, cvthree.height) * 3/8,dotsthree[i][1]+cvthree.height/2 - Math.min(cvthree.width, cvthree.height) * 3/8,5,cthree)
-					} else {
-						cthree.fillStyle = "rgb(139,272,2)"
-						fillEllipse(dotsthree[i][0]+cvthree.width/2 - Math.min(cvthree.width, cvthree.height) * 3/8,dotsthree[i][1]+cvthree.height/2 - Math.min(cvthree.width, cvthree.height) * 3/8,5,cthree)
-					}
-				}
-				for(var i = 0; i < populationthree-stilltwo;i++){	//moving
-					dotsthree[i][3]+=Math.random()*2-1
-					dotsthree[i][4]+=Math.random()*2-1
-
-					if ( dotsthree[i][3] >= speedthree ){dotsthree[i][3] = 0}
-					if ( dotsthree[i][3] <= -speedthree ){dotsthree[i][3] = 0}
-					if ( dotsthree[i][4] >= speedthree ){dotsthree[i][4] = 0}
-					if ( dotsthree[i][4] <= -speedthree ){dotsthree[i][4] = 0}
-
-					dotsthree[i][0]+=dotsthree[i][3]
-					dotsthree[i][1]+=dotsthree[i][4]
-
-					if(dotsthree[i][0]>1*Math.min(cvthree.width,cvthree.height)*3/4){
-						dotsthree[i][0]=1*Math.min(cvthree.width,cvthree.height)*3/4	
-					}
-					if(dotsthree[i][0]<0){
-						dotsthree[i][0]=0	
-					}
-					if(dotsthree[i][1]>1*Math.min(cvthree.width,cvthree.height)*3/4){
-						dotsthree[i][1]=1*Math.min(cvthree.width,cvthree.height)*3/4	
-					}
-					if(dotsthree[i][1]<0){
-						dotsthree[i][1]=0	
-					}
-				}
-				for(var i = 0;i<populationthree;i++){	//infection
-					if(dotsthree[i][2] == 1){
-						dotsthree[i][5]++
-						for(var j = 0;j<populationthree;j++){
-							for(var k = 0;k<10;k++){
-								if(Math.round(dotsthree[i][1])+k == Math.round(dotsthree[j][1]) && Math.round(dotsthree[i][0]) == Math.round(dotsthree[j][0]) && dotsthree[j][2] != 2){
-									dotsthree[j][2] = 1
-									dotsthree[j].push(0)
-									currentInfectionsThree++
-								}
-								if(Math.round(dotsthree[i][1])-k == Math.round(dotsthree[j][1]) && Math.round(dotsthree[i][0]) == Math.round(dotsthree[j][0]) && dotsthree[j][2] != 2) {
-									dotsthree[j][2] = 1
-									dotsthree[j].push(0)
-									currentInfectionsThree++
-								}
-								if(Math.round(dotsthree[i][1]) == Math.round(dotsthree[j][1]) && Math.round(dotsthree[i][0])+k == Math.round(dotsthree[j][0]) && dotsthree[j][2] != 2) {
-									dotsthree[j][2] = 1
-									dotsthree[j].push(0)
-									currentInfectionsThree++
-								}
-								if(Math.round(dotsthree[i][1]) == Math.round(dotsthree[j][1]) && Math.round(dotsthree[i][0])-k == Math.round(dotsthree[j][0]) && dotsthree[j][2] != 2) {
-									dotsthree[j][2] = 1
-									dotsthree[j].push(0)
-									currentInfectionsThree++
-								}
-							}
-						}
-						if(dotsthree[i][5] >= 200) {
-							var diethree = Math.round(Math.random())
-							if(diethree == 0) {
-								dotsthree[i][2] = 2
-							} else {
-								dotsthree[i][2] = 3
-							}
-						}
-					}
-				}
-				window.requestAnimationFrame(refreshThree)
-		}
-			refreshThree()
-		}
-		
-		//Simulation 4
-		{
-			var cvfour = document.getElementById("sdcanvas3")
-			var cfour = cvfour.getContext("2d")
-
-			var populationfour = 100
-			var infectedfour = 1
-			var speedfour = 15
-			var currentInfectionsFour = 1
-			var stillthree = (populationfour-infectedfour)/2
-
-			cvfour.width = window.innerWidth
-			cvfour.height = window.innerHeight
-
-			var dotsfour = [];
-
-			// [x, y, state, vx, vy, time]
-			for(var i = 0; i<infectedfour; i++){
-				dotsfour.push([Math.random()*Math.min(cvfour.width, cvfour.height) * 3/4,Math.random()*Math.min(cvfour.width, cvfour.height) * 3/4,1,speedfour*Math.random(),speedfour*Math.random(),0])
-			}
-			for(var i = 0; i<populationfour-infectedfour;i++){
-				dotsfour.push([Math.random()*Math.min(cvfour.width,cvfour.height)*3/4,Math.random()*Math.min(cvfour.width, cvfour.height) * 3/4,0,speedfour*Math.random(),speedfour*Math.random()])
-			}
-
-			var refreshFour = function()
-			{
-				cfour.fillStyle = "rgb(255,255,255)"
-				cfour.fillRect(0,0,window.innerWidth,window.innerHeight)
-				cfour.strokeStyle = "rgb(0,0,0)"
-				cfour.strokeRect(cvfour.width/2 - Math.min(cvfour.width, cvfour.height) * 3/8, cvfour.height/2 - Math.min(cvfour.width, cvfour.height) * 3/8, Math.min(cvfour.width, cvfour.height) * 3/4, Math.min(cvfour.width, cvfour.height) * 3/4)
-				for(var i = 0; i<populationfour; i++){
-					if(dotsfour[i][2] == 0){
-						cfour.fillStyle = "rgb(0,0,255)"
-						fillEllipse(dotsfour[i][0]+cvfour.width/2 - Math.min(cvfour.width, cvfour.height) * 3/8,dotsfour[i][1]+cvfour.height/2 - Math.min(cvfour.width, cvfour.height) * 3/8,5,cfour)
-					} 
-					else if(dotsfour[i][2] == 1) {
-						cfour.fillStyle = "rgb(255,0,0)"
-						fillEllipse(dotsfour[i][0]+cvfour.width/2 - Math.min(cvfour.width, cvfour.height) * 3/8,dotsfour[i][1]+cvfour.height/2 - Math.min(cvfour.width, cvfour.height) * 3/8,5,cfour)
-					}
-					else if(dotsfour[i][2] == 3) {
-						cfour.fillStyle = "rgb(0,0,0)"
-						fillEllipse(dotsfour[i][0]+cvfour.width/2 - Math.min(cvfour.width, cvfour.height) * 3/8,dotsfour[i][1]+cvfour.height/2 - Math.min(cvfour.width, cvfour.height) * 3/8,5,cfour)
-					}
-					else {
-						cfour.fillStyle = "rgb(139,272,2)"
-						fillEllipse(dotsfour[i][0]+cvfour.width/2 - Math.min(cvfour.width, cvfour.height) * 3/8,dotsfour[i][1]+cvfour.height/2 - Math.min(cvfour.width, cvfour.height) * 3/8,5,cfour)
-					}
-				}
-				for(var i = 0; i < populationfour-stillthree;i++){
-					dotsfour[i][3]+=Math.random()*2-1
-					dotsfour[i][4]+=Math.random()*2-1
-
-					if ( dotsfour[i][3] >= speedfour ){dotsfour[i][3] = 0}
-					if ( dotsfour[i][3] <= -speedfour ){dotsfour[i][3] = 0}
-					if ( dotsfour[i][4] >= speedfour ){dotsfour[i][4] = 0}
-					if ( dotsfour[i][4] <= -speedfour ){dotsfour[i][4] = 0}
-
-					dotsfour[i][0]+=dotsfour[i][3]
-					dotsfour[i][1]+=dotsfour[i][4]
-
-					if(dotsfour[i][0]>1*Math.min(cvfour.width,cvfour.height)*3/4){
-						dotsfour[i][0]=1*Math.min(cvfour.width,cvfour.height)*3/4	
-					}
-					if(dotsfour[i][0]<0){
-						dotsfour[i][0]=0	
-					}
-					if(dotsfour[i][1]>1*Math.min(cvfour.width,cvfour.height)*3/4){
-						dotsfour[i][1]=1*Math.min(cvfour.width,cvfour.height)*3/4	
-					}
-					if(dotsfour[i][1]<0){
-						dotsfour[i][1]=0	
-					}
-				}
-				for(var i = 0;i<populationfour;i++){	//infection
-					if(dotsfour[i][2] == 1){
-						dotsfour[i][5]++
-						for(var j = 0;j<populationfour;j++){
-							for(var k = 0;k<10;k++){
-								if(Math.round(dotsfour[i][1])+k == Math.round(dotsfour[j][1]) && Math.round(dotsfour[i][0]) == Math.round(dotsfour[j][0]) && dotsfour[j][2] != 2){
-									dotsfour[j][2] = 1
-									dotsfour[j].push(0)
-									currentInfectionsFour++
-								}
-								if(Math.round(dotsfour[i][1])-k == Math.round(dotsfour[j][1]) && Math.round(dotsfour[i][0]) == Math.round(dotsfour[j][0]) && dotsfour[j][2] != 2){
-									dotsfour[j][2] = 1
-									dotsfour[j].push(0)
-									currentInfectionsFour++
-								}
-								if(Math.round(dotsfour[i][1]) == Math.round(dotsfour[j][1]) && Math.round(dotsfour[i][0])+k == Math.round(dotsfour[j][0]) && dotsfour[j][2] != 2) {
-									dotsfour[j][2] = 1
-									dotsfour[j].push(0)
-									currentInfectionsFour++
-								}
-								if(Math.round(dotsfour[i][1]) == Math.round(dotsfour[j][1]) && Math.round(dotsfour[i][0])+k == Math.round(dotsfour[j][0]) && dotsfour[j][2] != 2) {
-									dotsfour[j][2] = 1
-									dotsfour[j].push(0)
-									currentInfectionsFour++
-								}
-							}
-						}
-						if(dotsfour[i][5] >= 200) {
-							var diefour = Math.round(Math.random())
-							if(diefour == 0) {
-								dotsfour[i][2] = 3
-							} else {
-								dotsfour[i][2] = 2
-							}
-						}
-					}
-				}
-				window.requestAnimationFrame(refreshFour)
-			}
-			refreshFour()
-		}
-  </script>
+	}
+	a.addEventListener("change",onChange)
+	</script>
 </html>
